@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { MONGO_IP, MONGO_PORT, MONGO_USER, MONGO_PASS } = require('./config/config.js');
 
 const port = process.env.PORT || 3000;
 
@@ -10,9 +11,21 @@ app.get('/', (req, res) => {
 });
 
 async function main() {
-  await mongoose.connect('mongodb://sandro:mypassword@mongo:27017/?authSource=admin');
+  await mongoose.connect(`mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`);
 }
 
-main().then(() => console.log("successfully connected to DB")).catch(err => console.log(err));
+
+function retryToConnect() {
+main().then(() => console.log("successfully connected to DB")).catch(err => {
+  console.log(err);
+  setTimeout(() => {
+    retryToConnect();
+  }, 3000);
+});
+}
+
+retryToConnect();
+
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
