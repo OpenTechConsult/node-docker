@@ -66,7 +66,7 @@ app.use(session({
 app.use(express.json());
 
 
-app.get('/', (req, res) => {
+app.get('/api/vi', (req, res) => {
   res.send('<h2>Hi there dumbo!! blah !!!</h2>');
 });
 
