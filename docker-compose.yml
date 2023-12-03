@@ -17,5 +17,8 @@ services:
     volumes:
       - mongodb:/data/db
 
+  redis:
+    image: redis
+
 volumes:
   mongodb:
